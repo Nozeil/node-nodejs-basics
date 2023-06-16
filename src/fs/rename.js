@@ -13,7 +13,7 @@ const rename = async () => {
     const isNewFileExist = existsSync(newPath);
 
     if (!isOldFileExist || isNewFileExist) {
-      throw Error("FS operation failed");
+      throw new FileSystemError();
     }
 
     await fsRename(oldPath, newPath);

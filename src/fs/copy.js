@@ -1,5 +1,5 @@
 import { copyFile, mkdir, opendir } from "fs/promises";
-import { getDirname } from "../utils/index.js";
+import { FileSystemError, getDirname } from "../utils/index.js";
 import { resolve } from "path";
 import { existsSync } from "fs";
 
@@ -29,7 +29,7 @@ const copy = async () => {
     const isFilesCopyExist = existsSync(filesCopyPath);
 
     if (!isFilesExist || isFilesCopyExist) {
-      throw Error("FS operation failed");
+      throw new FileSystemError();
     } else {
       await copyWithFolders(filesPath, filesCopyPath);
       console.log("Files copied");

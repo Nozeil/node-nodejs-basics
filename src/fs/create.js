@@ -11,7 +11,7 @@ const create = async () => {
     const isExist = existsSync(path);
 
     if (isExist) {
-      throw Error("FS operation failed");
+      throw new FileSystemError();
     } else {
       await appendFile(path, content);
       console.log("File created");
