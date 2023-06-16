@@ -11,10 +11,10 @@ const create = async () => {
     const isExist = existsSync(path);
 
     if (isExist) {
-      throw Error('FS operation failed')
+      throw Error("FS operation failed");
     } else {
       await appendFile(path, content);
-      console.log('File created');
+      console.log("File created");
     }
   } catch (error) {
     console.error(error);

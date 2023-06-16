@@ -32,7 +32,7 @@ const copy = async () => {
       throw Error("FS operation failed");
     } else {
       await copyWithFolders(filesPath, filesCopyPath);
-      console.log('Files copied');
+      console.log("Files copied");
     }
   } catch (error) {
     console.error(error);
