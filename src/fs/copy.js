@@ -1,11 +1,10 @@
 import { copyFile, mkdir, opendir } from "fs/promises";
 import { FileSystemError, getDirname } from "../utils/index.js";
 import { resolve } from "path";
-import { existsSync } from "fs";
 
 const copyWithFolders = async (pathFrom, pathTo) => {
-  await mkdir(pathTo);
   const dir = await opendir(pathFrom);
+  await mkdir(pathTo);
 
   for await (const dirent of dir) {
     const src = resolve(pathFrom, dirent.name);
@@ -25,18 +24,20 @@ const copy = async () => {
     const filesPath = resolve(__dirname, "files");
     const filesCopyPath = resolve(__dirname, "files_copy");
 
-    const isFilesExist = existsSync(filesPath);
-    const isFilesCopyExist = existsSync(filesCopyPath);
-
-    if (!isFilesExist || isFilesCopyExist) {
-      throw new FileSystemError();
-    } else {
-      await copyWithFolders(filesPath, filesCopyPath);
-      console.log("Files copied");
-    }
+    await copyWithFolders(filesPath, filesCopyPath);
+    console.log("Files copied");
   } catch (error) {
-    console.error(error);
+    if (error?.code === 'ENOENT' || error?.code === 'EEXIST') {
+      throw new FileSystemError();
+    }
+
+    throw error;
   }
 };
 
-await copy();
+try {
+  await copy();
+} catch (error) {
+  console.error(error);
+}
+

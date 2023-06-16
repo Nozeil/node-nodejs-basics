@@ -1,7 +1,6 @@
 import { rename as fsRename } from "fs/promises";
-import { getDirname } from "../utils/index.js";
+import { getDirname, FileSystemError } from "../utils/index.js";
 import { resolve } from "path";
-import { existsSync } from "fs";
 
 const rename = async () => {
   try {
@@ -9,17 +8,20 @@ const rename = async () => {
     const oldPath = resolve(__dirname, "files/wrongFilename.txt");
     const newPath = resolve(__dirname, "files/properFilename.md");
 
-    const isOldFileExist = existsSync(oldPath);
-    const isNewFileExist = existsSync(newPath);
-
-    if (!isOldFileExist || isNewFileExist) {
+    await fsRename(oldPath, newPath);
+    console.log('File renamed');
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
       throw new FileSystemError();
     }
-
-    await fsRename(oldPath, newPath);
-  } catch (error) {
-    console.error(error);
+    
+    throw error;
   }
 };
 
-await rename();
+try {
+  await rename();
+} catch (error) {
+  console.error(error);
+}
+
