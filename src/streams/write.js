@@ -8,7 +8,7 @@ const write = async () => {
   const path = resolve(__dirname, "files/fileToWrite.txt");
 
   try {
-    await pipeline(process.stdin, createWriteStream(path, {flags: ''}));
+    await pipeline(process.stdin, createWriteStream(path));
   } catch (error) {
     console.error(error);
   }
