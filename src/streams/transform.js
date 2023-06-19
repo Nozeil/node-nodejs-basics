@@ -3,7 +3,7 @@ import { Transform } from "stream";
 import { pipeline } from "stream/promises";
 
 const reverse = new Transform({
-  transform(chunk) {
+  transform(chunk, enc, cb) {
     let result = "";
     const stringifiedChunk = chunk.toString().trim();
 
@@ -12,6 +12,7 @@ const reverse = new Transform({
     }
 
     this.push(result + "\n");
+    cb();
   },
 });
 
