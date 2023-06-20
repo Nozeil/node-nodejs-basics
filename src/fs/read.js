@@ -1,5 +1,24 @@
+import { getDirname, FileSystemError } from "../utils/index.js";
+import { resolve } from "path";
+import { readFile } from "fs/promises";
+
 const read = async () => {
-    // Write your code here 
+  try {
+    const __dirname = getDirname(import.meta.url);
+    const path = resolve(__dirname, "files/fileToRead.txt");
+    const file = await readFile(path, "utf-8");
+    console.log(file);
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      throw new FileSystemError();
+    }
+
+    throw error;
+  }
 };
 
-await read();
+try {
+  await read();
+} catch (error) {
+  console.error(error);
+}
